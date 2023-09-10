@@ -1,6 +1,6 @@
 "use client";
 
-import type {ChangeEvent, FormEvent} from "react";
+import type {ChangeEvent, FormEvent, KeyboardEventHandler} from "react";
 import {useState} from "react";
 
 export function ChatWindow(
@@ -16,7 +16,7 @@ export function ChatWindow(
         setInputValue(e.target.value);
     };
 
-    const handleShortCutKeyPress = async (e: KeyboardEvent) => {
+    const handleShortCutKeyPress = async (e:any) => {
         if (e.key === 'Enter') {
             await sendContent(e);
         }
