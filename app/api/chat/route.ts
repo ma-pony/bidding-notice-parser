@@ -6,9 +6,17 @@ import {ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTempl
 import {createStructuredOutputChainFromZod} from "langchain/chains/openai_functions";
 import {Page, chromium} from "playwright";
 
-const proxyUrl = `http://${process.env.PROXY_HOST}:${process.env.PROXY_PORT}`
+const proxyUrl = process.env.PROXY_URL
 const proxyUsername = process.env.PROXY_USERNAME
 const proxyPassword = process.env.PROXY_PASSWORD
+let proxyServer: { server: string; username: string | undefined; password: string | undefined; } | undefined = undefined
+if (proxyUrl ) {
+    proxyServer = {
+        server: proxyUrl,
+        username: proxyUsername,
+        password: proxyPassword,
+    }
+}
 
 async function openPageResponse(url: string) {
     const browser = await chromium.launch(
@@ -25,11 +33,7 @@ async function openPageResponse(url: string) {
                 "--disable-blink-features=AutomationControlled",
                 "--user-agent=\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36\"",
             ],
-            proxy: {
-                server: proxyUrl,
-                username: proxyUsername,
-                password: proxyPassword,
-            },
+            proxy: proxyServer,
         }
     );
     const context = await browser.newContext();
