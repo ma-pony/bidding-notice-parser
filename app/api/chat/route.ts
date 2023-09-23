@@ -41,7 +41,7 @@ async function openPageResponse(url: string) {
     await page.route(
         "**/*",
         (route) => {
-            if (route.request().resourceType() in ["image"]) {
+            if (route.request().resourceType() in ["image", "media", "font", "stylesheet"]) {
                 route.abort();
             } else {
                 route.continue();
