@@ -74,7 +74,7 @@ export function ChatWindow(
                     </div>
 
                 ) : (
-                    <pre className="whitespace-pre-line">{returnValue}</pre>
+                    <pre className="whitespace-pre-wrap break-words">{returnValue}</pre>
                 )}
             </div>
         </div>
