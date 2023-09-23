@@ -4,61 +4,48 @@ import {z} from "zod";
 import {ChatOpenAI} from "langchain/chat_models/openai";
 import {ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate,} from "langchain/prompts";
 import {createStructuredOutputChainFromZod} from "langchain/chains/openai_functions";
-import {Page, chromium} from "playwright";
+import puppeteer from "puppeteer";
 
-const proxyUrl = process.env.PROXY_URL
-const proxyUsername = process.env.PROXY_USERNAME
-const proxyPassword = process.env.PROXY_PASSWORD
-let proxyServer: { server: string; username: string | undefined; password: string | undefined; } | undefined = undefined
-if (proxyUrl ) {
-    proxyServer = {
-        server: proxyUrl,
-        username: proxyUsername,
-        password: proxyPassword,
-    }
-}
+const browserWSEndpoint = process.env.BROWSER_WS_ENDPOINT
 
 async function openPageResponse(url: string) {
-    const browser = await chromium.launch(
+    // const browser = await chromium.launch(
+    //
+    //     {
+    //         // headless: false,
+    //         args: [
+    //             "--disable-web-security",
+    //             "--disable-extensions",
+    //             "--disable-sync",
+    //             "--disable-setuid-sandbox",
+    //             "--no-first-run",
+    //             "--no-sandbox",
+    //             "--ignore-certificate-errors",
+    //             "--disable-blink-features=AutomationControlled",
+    //             "--user-agent=\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36\"",
+    //         ],
+    //         proxy: proxyServer,
+    //     }
+    // );
+    const browser = await puppeteer.connect(
         {
-            // headless: false,
-            args: [
-                "--disable-web-security",
-                "--disable-extensions",
-                "--disable-sync",
-                "--disable-setuid-sandbox",
-                "--no-first-run",
-                "--no-sandbox",
-                "--ignore-certificate-errors",
-                "--disable-blink-features=AutomationControlled",
-                "--user-agent=\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36\"",
-            ],
-            proxy: proxyServer,
-        }
-    );
-    const context = await browser.newContext();
-    const page: Page = await context.newPage();
-    await page.route(
-        "**/*",
-        (route) => {
-            if (route.request().resourceType() in ["image", "media", "font", "stylesheet"]) {
-                route.abort();
-            } else {
-                route.continue();
-            }
+            browserWSEndpoint
         }
     )
+    const page = await browser.newPage();
     await page.goto(
         url,
         {
-            waitUntil: "networkidle",
             timeout: 120 * 1000,
         }
     );
-    const content = await page.innerText("body")
+
+    // get inner text
+    const element = await page.$("body");
+    const textContent = await element?.evaluate((el) => el.textContent);
     await browser.close();
-    console.log(content)
-    return content
+    console.log(textContent)
+    return textContent
 }
 
 export async function POST(req: NextRequest) {
@@ -73,7 +60,6 @@ export async function POST(req: NextRequest) {
         })
 
         const content = await openPageResponse(body.content)
-
 
 
         const llm = new ChatOpenAI({modelName: "gpt-3.5-turbo-0613", temperature: 0.7});
