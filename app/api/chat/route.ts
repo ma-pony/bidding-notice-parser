@@ -48,7 +48,13 @@ async function openPageResponse(url: string) {
             }
         }
     )
-    await page.goto(url);
+    await page.goto(
+        url,
+        {
+            waitUntil: "networkidle",
+            timeout: 120 * 1000,
+        }
+    );
     const content = await page.innerText("body")
     await browser.close();
     console.log(content)
