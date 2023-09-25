@@ -40,7 +40,7 @@ export function ChatWindow(
     return (
         <div className="flex w-full flex-col">
             <div className="mt-4 text-center text-gray-400">
-                <span className="text-[hsl(80%,80%,80%)]">例如:  http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202309/t20230910_20674273.htm</span>
+                <span className="text-[hsl(80%,80%,80%)]">🌰:  http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202309/t20230910_20674273.htm</span>
             </div>
             <form onSubmit={sendContent} className="flex w-full flex-col">
                 <div className="flex w-full mt-4">
@@ -61,7 +61,7 @@ export function ChatWindow(
 
             </form>
             <div className="mt-4 text-center text-gray-400">
-                <span className="text-[hsl(80%,80%,80%)]">Parse Response</span>
+                <span className="text-[hsl(80%,80%,80%)]">解析结果</span>
             </div>
 
             <div className="mt-4 p-4 rounded-xl bg-gray-200 flex-grow">
@@ -69,7 +69,7 @@ export function ChatWindow(
                     <div className="flex flex-col justify-center items-center">
                         <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-sky-600 border-opacity-75 mb-4"></div>
                         <div className="text-center">
-                            <span className="text-gray-400">Loading...</span>
+                            <span className="text-gray-400">解析中...</span>
                         </div>
                     </div>
 
