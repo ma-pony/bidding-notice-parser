@@ -40,7 +40,7 @@ export function ChatWindow(
     return (
         <div className="flex w-full flex-col">
             <div className="mt-4 text-center text-gray-400">
-                <span className="text-[hsl(80%,80%,80%)]">Example:  http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202309/t20230910_20674273.htm</span>
+                <span className="text-[hsl(80%,80%,80%)]">例如:  http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202309/t20230910_20674273.htm</span>
             </div>
             <form onSubmit={sendContent} className="flex w-full flex-col">
                 <div className="flex w-full mt-4">
@@ -55,7 +55,7 @@ export function ChatWindow(
                         className="shrink-0 px-8 py-4 bg-sky-600 rounded-full w-28"
                         onKeyDown={handleShortCutKeyPress}
                     >
-                        <span>Send</span>
+                        <span>发送</span>
                     </button>
                 </div>
 
