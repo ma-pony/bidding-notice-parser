@@ -22,7 +22,7 @@
     "eslint-config-next": "13.4.19",
     "langchain": "^0.0.144",
     "mini-css-extract-plugin": "^2.7.6",
-    "next": "13.4.19",
+    "next": "13.5.0",
     "playwright": "^1.37.1",
     "postcss": "8.4.31",
     "puppeteer": "^21.1.1",
